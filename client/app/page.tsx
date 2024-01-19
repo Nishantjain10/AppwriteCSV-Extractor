@@ -18,7 +18,7 @@ const Home = () => {
       setLoading(true);
 
       const response = await fetch(
-        `http://localhost:8080/api/home?databaseId=${databaseId}&collectionId=${collectionId}&appwriteEndpoint=${appwriteEndpoint}&appwriteProjectId=${appwriteProjectId}&appwriteProjectKey=${appwriteProjectKey}`
+        `https://appwritecsv-extractor.onrender.com/api/home?databaseId=${databaseId}&collectionId=${collectionId}&appwriteEndpoint=${appwriteEndpoint}&appwriteProjectId=${appwriteProjectId}&appwriteProjectKey=${appwriteProjectKey}`
       );
       const result = await response.json();
 

@@ -36,29 +36,9 @@ app.get("/api/home", async (req, res) => {
       .setProject(appwriteProjectId);
 
     const databases = new sdk.Databases(appwriteClient);
-    const documents = [];
-    let page = 1;
-    let totalDocuments = 0;
+    const documents = await databases.listDocuments(databaseId, collectionId);
 
-    // Fetch all documents using pagination
-    do {
-      const response = await databases.listDocuments(
-        databaseId,
-        collectionId,
-        null,
-        null,
-        null,
-        page,
-        100 // You can adjust the limit based on your needs
-      );
-
-      documents.push(...response.documents);
-      totalDocuments = response.sum;
-
-      page++;
-    } while (documents.length < totalDocuments);
-
-    const formattedData = documents.map((document) => {
+    const formattedData = documents.documents.map((document) => {
       return Object.fromEntries(
         Object.entries(document).map(([key, value]) => [key, [value]])
       );

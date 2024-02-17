@@ -104,8 +104,6 @@ const Home = () => {
             onChange={(e) => setAppwriteProjectId(e.target.value)}
           />
         </div>
-
-        {/* Appwrite Project Key Input */}
         {/* Database ID Input */}
         <div className="mb-4 mt-4">
           <label

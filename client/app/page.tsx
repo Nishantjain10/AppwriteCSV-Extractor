@@ -18,17 +18,26 @@ const Home = () => {
       setLoading(true);
 
       const response = await fetch(
-        `https://appwritecsv-extractor.onrender.com/api/home?databaseId=${databaseId}&collectionId=${collectionId}&appwriteEndpoint=${appwriteEndpoint}&appwriteProjectId=${appwriteProjectId}&appwriteProjectKey=${appwriteProjectKey}`
+        `http://localhost:8080/api/home?databaseId=${databaseId}&collectionId=${collectionId}&appwriteEndpoint=${appwriteEndpoint}&appwriteProjectId=${appwriteProjectId}`
       );
       const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to fetch data");
+      } 
 
       setData(result.data || []);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+
+      // Log the error and display an error message to the user
+      alert("Error fetching data:" + (error as Error).message);
+
       setLoading(false);
     }
   };
+  
 
   // Download data as CSV
   const downloadCSV = () => {
@@ -97,22 +106,6 @@ const Home = () => {
         </div>
 
         {/* Appwrite Project Key Input */}
-        <div className="mb-4">
-          <label
-            htmlFor="appwriteProjectKeyID"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Appwrite Project Key:
-          </label>
-          <input
-            type="text"
-            id="appwriteProjectKeyID"
-            className="border rounded w-full py-2 px-3 focus:outline-none focus:ring focus:border-blue-500"
-            value={appwriteProjectKey}
-            onChange={(e) => setAppwriteProjectKey(e.target.value)}
-          />
-        </div>
-
         {/* Database ID Input */}
         <div className="mb-4 mt-4">
           <label

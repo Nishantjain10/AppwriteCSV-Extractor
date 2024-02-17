@@ -1,4 +1,3 @@
-require("dotenv/config");
 const express = require("express");
 const cors = require("cors");
 const sdk = require("node-appwrite");
@@ -9,6 +8,11 @@ const PORT = 8080;
 app.use(cors());
 app.use(express.json());
 
+// New route for the main page
+app.get("/", (req, res) => {
+  res.send("Hello, World!"); // Sending "Hello, World!" message
+});
+
 app.get("/api/home", async (req, res) => {
   try {
     const {
@@ -16,23 +20,20 @@ app.get("/api/home", async (req, res) => {
       collectionId,
       appwriteEndpoint,
       appwriteProjectId,
-      appwriteProjectKey,
     } = req.query;
 
     if (
       !databaseId ||
       !collectionId ||
       !appwriteEndpoint ||
-      !appwriteProjectId ||
-      !appwriteProjectKey
+      !appwriteProjectId
     ) {
       return res.status(400).json({ error: "All parameters are required." });
     }
 
     const appwriteClient = new sdk.Client()
       .setEndpoint(appwriteEndpoint)
-      .setProject(appwriteProjectId)
-      .setKey(appwriteProjectKey);
+      .setProject(appwriteProjectId);
 
     const databases = new sdk.Databases(appwriteClient);
     const documents = await databases.listDocuments(databaseId, collectionId);
@@ -46,7 +47,7 @@ app.get("/api/home", async (req, res) => {
     res.json({ data: formattedData });
   } catch (error) {
     console.error("Error fetching documents:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message }); // Sending error message in response
   }
 });
 
